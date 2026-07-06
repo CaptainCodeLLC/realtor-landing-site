@@ -1,0 +1,28 @@
+[
+  {
+    "id": "5c600565-4904-4b0a-8737-b7037fddee31",
+    "nombre": "bryan",
+    "telefono": "+1 786 266 7716",
+    "email": "",
+    "mudanza": "",
+    "operacion": "renta",
+    "tipo": "Oficina",
+    "presupuesto": "",
+    "mensaje": "WhatsApp · Oficina Polanco",
+    "propertyId": "oficina-polanco",
+    "createdAt": "2026-07-06T15:20:55.549Z"
+  },
+  {
+    "id": "f5b1deb4-660a-4143-b538-86074643ddc2",
+    "nombre": "Pepe",
+    "telefono": "+52 2294225100",
+    "email": "",
+    "mudanza": "",
+    "operacion": "venta",
+    "tipo": "Casa unifamiliar",
+    "presupuesto": "",
+    "mensaje": "WhatsApp · Residencia Lomas Altas",
+    "propertyId": "residencia-lomas-altas",
+    "createdAt": "2026-05-10T04:51:13.739Z"
+  }
+]

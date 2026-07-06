@@ -1,0 +1,146 @@
+[
+  {
+    "id": "residencia-lomas-altas",
+    "titulo": "Residencia Lomas Altas",
+    "operacion": "venta",
+    "tipo": "Casa unifamiliar",
+    "zona": "Veracruz",
+    "precio": 18500000,
+    "moneda": "MXN",
+    "ubicacion": {
+      "direccion": "Lomas Altas, Miguel Hidalgo",
+      "ciudad": "Ciudad de México",
+      "estado": "CDMX",
+      "lat": 19.408,
+      "lng": -99.226
+    },
+    "recamaras": 4,
+    "banos": 4.5,
+    "estacionamientos": 3,
+    "superficieConstruida": 520,
+    "superficieTerreno": 680,
+    "anioConstruccion": 2021,
+    "descripcion": "Residencia contemporánea con jardín privado, terraza cubierta y acabados premium para una vida familiar cómoda y discreta.",
+    "amenidades": [
+      "Jardín",
+      "Terraza",
+      "Cocina integral",
+      "Estudio",
+      "Seguridad 24/7"
+    ],
+    "imagenes": [
+      "/images/family-house.png"
+    ],
+    "destacado": true,
+    "vistas": 1240,
+    "createdAt": "2026-05-03T18:00:00.000Z"
+  },
+  {
+    "id": "departamento-playa-norte",
+    "titulo": "Departamento Playa Norte",
+    "operacion": "venta",
+    "tipo": "Departamento",
+    "zona": "Boca del Rio",
+    "precio": 9800000,
+    "moneda": "MXN",
+    "ubicacion": {
+      "direccion": "Zona Hotelera, Cancún",
+      "ciudad": "Cancún",
+      "estado": "Quintana Roo",
+      "lat": 21.1619,
+      "lng": -86.8515
+    },
+    "recamaras": 3,
+    "banos": 3,
+    "estacionamientos": 2,
+    "superficieConstruida": 210,
+    "superficieTerreno": 0,
+    "anioConstruccion": 2023,
+    "descripcion": "Departamento luminoso con terraza, distribución abierta y acceso rápido a servicios, playa y restaurantes.",
+    "amenidades": [
+      "Alberca",
+      "Gimnasio",
+      "Terraza",
+      "Elevador",
+      "Vigilancia"
+    ],
+    "imagenes": [
+      "/images/apartment-living.png"
+    ],
+    "destacado": true,
+    "vistas": 980,
+    "createdAt": "2026-05-03T18:15:00.000Z"
+  },
+  {
+    "id": "villa-jardin-privado",
+    "titulo": "Villa Jardín Privado",
+    "operacion": "renta",
+    "tipo": "Villa",
+    "zona": "Alvarado",
+    "precio": 85000,
+    "moneda": "MXN",
+    "ubicacion": {
+      "direccion": "Temozón Norte",
+      "ciudad": "Mérida",
+      "estado": "Yucatán",
+      "lat": 21.0444,
+      "lng": -89.622
+    },
+    "recamaras": 4,
+    "banos": 4,
+    "estacionamientos": 2,
+    "superficieConstruida": 380,
+    "superficieTerreno": 540,
+    "anioConstruccion": 2022,
+    "descripcion": "Villa amueblada con espacios amplios, vegetación madura y privacidad para estancias largas o reubicación ejecutiva.",
+    "amenidades": [
+      "Amueblada",
+      "Jardín",
+      "Alberca",
+      "Paneles solares",
+      "Pet friendly"
+    ],
+    "imagenes": [
+      "/images/hero-property.png"
+    ],
+    "destacado": true,
+    "vistas": 745,
+    "createdAt": "2026-05-03T18:25:00.000Z"
+  },
+  {
+    "id": "oficina-polanco",
+    "titulo": "Oficina Polanco",
+    "operacion": "renta",
+    "tipo": "Oficina",
+    "zona": "Veracruz",
+    "precio": 140000,
+    "moneda": "MXN",
+    "ubicacion": {
+      "direccion": "Av. Presidente Masaryk",
+      "ciudad": "Ciudad de México",
+      "estado": "CDMX",
+      "lat": 19.433,
+      "lng": -99.194
+    },
+    "recamaras": 0,
+    "banos": 4,
+    "estacionamientos": 8,
+    "superficieConstruida": 460,
+    "superficieTerreno": 0,
+    "anioConstruccion": 2019,
+    "descripcion": "Piso corporativo listo para operar, con salas de juntas, recepción y ubicación estratégica para equipos comerciales.",
+    "amenidades": [
+      "Recepción",
+      "Salas de juntas",
+      "Elevador",
+      "Estacionamiento",
+      "Control de acceso"
+    ],
+    "imagenes": [
+      "/images/office-space.png"
+    ],
+    "destacado": true,
+    "vistas": 612,
+    "createdAt": "2026-05-03T18:35:00.000Z"
+  }
+]

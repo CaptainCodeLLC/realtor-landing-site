@@ -50,6 +50,42 @@ export const translations = {
       title: "Seguimiento directo para comprar, vender o rentar con confianza",
       copy: "Cada solicitud llega con la información necesaria para dar una respuesta útil: fecha de mudanza, tipo de propiedad, operación, presupuesto y teléfono de contacto."
     },
+    about: {
+      eyebrow: "Sobre Mara Barquet",
+      title: "Asesoría inmobiliaria en Boca del Río, Veracruz",
+      copy:
+        "Mara acompaña a familias e inversionistas en la compra, venta y renta de propiedades en la zona conurbada de Veracruz, Boca del Río y Alvarado. Más de una década de experiencia local con ética profesional y seguimiento personal en cada operación.",
+      call: "Agendar una llamada",
+      leadContext: "Sobre Mara",
+      whatsappMessage:
+        "Hola Mara, vi tu sitio y me gustaría conocerte para platicar sobre una propiedad.",
+      statsAria: "Cifras de práctica",
+      stats: [
+        { value: "12+", label: "años de experiencia" },
+        { value: "300+", label: "propiedades cerradas" },
+        { value: "Boca del Río", label: "Veracruz · Alvarado" }
+      ],
+      certificationsAria: "Certificaciones",
+      certificationsEyebrow: "Credenciales profesionales",
+      certifications: [
+        {
+          title: "AMPI",
+          description: "Asociación Mexicana de Profesionales Inmobiliarios, sección Veracruz."
+        },
+        {
+          title: "Cédula profesional",
+          description: "Acreditación estatal vigente en Veracruz."
+        },
+        {
+          title: "CIPS",
+          description: "Certified International Property Specialist (NAR)."
+        },
+        {
+          title: "Diplomado en Bienes Raíces",
+          description: "Valuación, financiamiento y fideicomisos."
+        }
+      ]
+    },
     explorer: {
       eyebrow: "Inventario activo",
       title: "Busca en tiempo real por venta, renta y características",
@@ -195,6 +231,42 @@ export const translations = {
       eyebrow: "Clear guidance",
       title: "Direct support for buying, selling, or renting with confidence",
       copy: "Every inquiry includes the context needed for a useful reply: move-in timing, property type, transaction type, budget, and phone number."
+    },
+    about: {
+      eyebrow: "About Mara Barquet",
+      title: "Real estate guidance in Boca del Rio, Veracruz",
+      copy:
+        "Mara guides families and investors through buying, selling, and renting properties across Veracruz, Boca del Rio, and Alvarado. She brings more than a decade of local experience, professional ethics, and personal follow-up to every transaction.",
+      call: "Schedule a call",
+      leadContext: "About Mara",
+      whatsappMessage:
+        "Hello Mara, I saw your website and would like to meet you to talk about a property.",
+      statsAria: "Practice highlights",
+      stats: [
+        { value: "12+", label: "years of experience" },
+        { value: "300+", label: "closed properties" },
+        { value: "Boca del Rio", label: "Veracruz · Alvarado" }
+      ],
+      certificationsAria: "Certifications",
+      certificationsEyebrow: "Professional credentials",
+      certifications: [
+        {
+          title: "AMPI",
+          description: "Mexican Association of Real Estate Professionals, Veracruz section."
+        },
+        {
+          title: "Professional license",
+          description: "Current state accreditation in Veracruz."
+        },
+        {
+          title: "CIPS",
+          description: "Certified International Property Specialist (NAR)."
+        },
+        {
+          title: "Real Estate Diploma",
+          description: "Valuation, financing, and trusts."
+        }
+      ]
     },
     explorer: {
       eyebrow: "Active inventory",

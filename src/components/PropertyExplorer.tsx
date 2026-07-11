@@ -7,11 +7,11 @@ import { Bath, BedDouble, Building2, Car, MapPinned, Search, SlidersHorizontal }
 import { useI18n } from "@/components/I18nProvider";
 import { formatMoney, mapUrl } from "@/lib/format";
 import { getOperationLabel, getPriceSuffix, getPropertyCopy, getPropertyTypeLabel } from "@/lib/i18n";
-import type { Operation, Property, PropertyType } from "@/types/property";
+import type { Operation, PropertyType, PublicProperty } from "@/types/property";
 import { propertyTypes } from "@/types/property";
 
 type PropertyExplorerProps = {
-  properties: Property[];
+  properties: PublicProperty[];
 };
 
 type Filters = {
@@ -56,8 +56,13 @@ export function PropertyExplorer({ properties }: PropertyExplorerProps) {
           .toLowerCase()
           .includes(search);
 
+      const matchesOperation =
+        filters.operacion === "todas" ||
+        property.operacion === filters.operacion ||
+        (filters.operacion === "renta" && property.operacion === "renta_temporal");
+
       return (
-        (filters.operacion === "todas" || property.operacion === filters.operacion) &&
+        matchesOperation &&
         (filters.tipo === "todos" || property.tipo === filters.tipo) &&
         property.recamaras >= filters.recamaras &&
         property.banos >= filters.banos &&
@@ -164,7 +169,9 @@ export function PropertyExplorer({ properties }: PropertyExplorerProps) {
             <article className="propertyCard" key={property.id}>
               <div className="propertyMedia">
                 <img src={property.imagenes[0] ?? "/images/hero-property.png"} alt={copy.titulo} />
-                <span>{getOperationLabel(property.operacion, language)}</span>
+                <span className={property.operacion === "renta_temporal" ? "badgeShortTerm" : ""}>
+                  {getOperationLabel(property.operacion, language)}
+                </span>
               </div>
               <div className="propertyBody">
                 <div className="propertyTitleRow">

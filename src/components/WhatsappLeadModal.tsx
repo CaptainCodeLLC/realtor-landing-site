@@ -3,10 +3,10 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { siteConfig } from "@/lib/site";
-import type { Property } from "@/types/property";
+import type { PublicProperty } from "@/types/property";
 
 type WhatsappLeadModalProps = {
-  property?: Property;
+  property?: PublicProperty;
   prefilledMessage: string;
   triggerLabel: string;
   triggerClassName?: string;

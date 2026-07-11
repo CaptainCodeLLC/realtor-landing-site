@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import { addProperty, getProperties, slugify } from "@/lib/cms";
-import { isZone } from "@/types/property";
-import type { Operation, Property, PropertyType, Zone } from "@/types/property";
+import { addProperty, getProperties, slugify, toPublicProperty } from "@/lib/cms";
+import type { Operation, Property, PropertyType } from "@/types/property";
 import { numberFromForm, parseAmenities, saveImages, textFromForm } from "@/lib/properties-form";
 import { resolveMapEmbedQuery } from "@/lib/google-maps";
 
 export const runtime = "nodejs";
 
 export async function GET() {
-  return NextResponse.json(await getProperties());
+  const properties = await getProperties();
+  return NextResponse.json(properties.filter((property) => property.disponible).map(toPublicProperty));
 }
 
 export async function POST(request: Request) {
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   }
 
   const zonaRaw = textFromForm(formData, "zona");
-  if (!isZone(zonaRaw)) {
+  if (!zonaRaw) {
     return NextResponse.json({ message: "La zona es obligatoria." }, { status: 400 });
   }
 
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
     titulo: title,
     operacion: textFromForm(formData, "operacion") as Operation,
     tipo: textFromForm(formData, "tipo") as PropertyType,
-    zona: zonaRaw as Zone,
+    zona: zonaRaw,
     precio,
     moneda: textFromForm(formData, "moneda") === "USD" ? "USD" : "MXN",
     ubicacion: {
@@ -93,6 +93,12 @@ export async function POST(request: Request) {
     amenidades: parseAmenities(formData),
     imagenes: images,
     destacado: formData.get("destacado") === "on",
+    disponible: formData.get("disponible") === "on",
+    contactoPropietario: {
+      nombre: textFromForm(formData, "propietarioNombre"),
+      telefono: textFromForm(formData, "propietarioTelefono"),
+      correo: textFromForm(formData, "propietarioCorreo")
+    },
     vistas: 0,
     createdAt: new Date().toISOString()
   };

@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { deleteProperty, getProperty, unlinkUploadedImages, updateProperty } from "@/lib/cms";
-import { isZone } from "@/types/property";
-import type { Operation, Property, PropertyType, Zone } from "@/types/property";
+import type { Operation, Property, PropertyType } from "@/types/property";
 import {
   numberFromForm,
   parseAmenities,
@@ -40,7 +39,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
   }
 
   const zonaRaw = textFromForm(formData, "zona");
-  if (!isZone(zonaRaw)) {
+  if (!zonaRaw) {
     return NextResponse.json({ message: "La zona es obligatoria." }, { status: 400 });
   }
 
@@ -82,7 +81,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
     titulo: title,
     operacion: textFromForm(formData, "operacion") as Operation,
     tipo: textFromForm(formData, "tipo") as PropertyType,
-    zona: zonaRaw as Zone,
+    zona: zonaRaw,
     precio,
     moneda: textFromForm(formData, "moneda") === "USD" ? "USD" : "MXN",
     ubicacion: {
@@ -101,7 +100,13 @@ export async function PUT(request: Request, { params }: RouteParams) {
     descripcion,
     amenidades: parseAmenities(formData),
     imagenes: images.length ? images : ["/images/hero-property.png"],
-    destacado: formData.get("destacado") === "on"
+    destacado: formData.get("destacado") === "on",
+    disponible: formData.get("disponible") === "on",
+    contactoPropietario: {
+      nombre: textFromForm(formData, "propietarioNombre"),
+      telefono: textFromForm(formData, "propietarioTelefono"),
+      correo: textFromForm(formData, "propietarioCorreo")
+    }
   };
 
   await updateProperty(updated);

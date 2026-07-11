@@ -7,10 +7,10 @@ import { ArrowLeft, ArrowRight, BadgeCheck, MapPin } from "lucide-react";
 import { useI18n } from "@/components/I18nProvider";
 import { formatMoney } from "@/lib/format";
 import { getOperationLabel, getPriceSuffix, getPropertyCopy } from "@/lib/i18n";
-import type { Property } from "@/types/property";
+import type { PublicProperty } from "@/types/property";
 
 type HeroCarouselProps = {
-  properties: Property[];
+  properties: PublicProperty[];
 };
 
 export function HeroCarousel({ properties }: HeroCarouselProps) {

@@ -1,4 +1,4 @@
-export type Operation = "venta" | "renta";
+export type Operation = "venta" | "renta" | "renta_temporal";
 
 export type PropertyType =
   | "Casa unifamiliar"
@@ -11,8 +11,6 @@ export type PropertyType =
   | "Edificio"
   | "Terreno";
 
-export type Zone = "Boca del Rio" | "Alvarado" | "Veracruz";
-
 export type PropertyLocation = {
   direccion: string;
   ciudad: string;
@@ -21,12 +19,18 @@ export type PropertyLocation = {
   mapEmbedQuery: string;
 };
 
+export type PropertyOwnerContact = {
+  nombre: string;
+  telefono: string;
+  correo: string;
+};
+
 export type Property = {
   id: string;
   titulo: string;
   operacion: Operation;
   tipo: PropertyType;
-  zona: Zone;
+  zona: string;
   precio: number;
   moneda: "MXN" | "USD";
   ubicacion: PropertyLocation;
@@ -40,9 +44,14 @@ export type Property = {
   amenidades: string[];
   imagenes: string[];
   destacado: boolean;
+  disponible: boolean;
+  contactoPropietario: PropertyOwnerContact;
   vistas: number;
   createdAt: string;
 };
+
+/** Property with internal-only fields stripped — the only shape ever sent to public pages/APIs. */
+export type PublicProperty = Omit<Property, "contactoPropietario">;
 
 export type Lead = {
   id: string;
@@ -69,9 +78,3 @@ export const propertyTypes: PropertyType[] = [
   "Edificio",
   "Terreno"
 ];
-
-export const zones: Zone[] = ["Boca del Rio", "Alvarado", "Veracruz"];
-
-export function isZone(value: unknown): value is Zone {
-  return typeof value === "string" && (zones as string[]).includes(value);
-}

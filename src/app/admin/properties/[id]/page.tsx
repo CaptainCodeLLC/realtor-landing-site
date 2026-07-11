@@ -45,6 +45,7 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
           <h1>{property.titulo}</h1>
           <p>
             {operationLabel(property.operacion)} · {property.tipo} · {property.zona}
+            {!property.disponible && <em className="adminRowUnavailable"> · No disponible</em>}
           </p>
           <Link href={"/admin" as Route} className="adminBackLink">
             <ArrowLeft size={16} /> Volver al panel
@@ -118,6 +119,18 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
               <div>
                 <dt>Vistas</dt>
                 <dd>{property.vistas}</dd>
+              </div>
+              <div>
+                <dt>Propietario</dt>
+                <dd>{property.contactoPropietario.nombre || "—"}</dd>
+              </div>
+              <div>
+                <dt>Teléfono propietario</dt>
+                <dd>{property.contactoPropietario.telefono || "—"}</dd>
+              </div>
+              <div>
+                <dt>Correo propietario</dt>
+                <dd>{property.contactoPropietario.correo || "—"}</dd>
               </div>
             </dl>
             <p className="adminSummaryDescription">{property.descripcion}</p>

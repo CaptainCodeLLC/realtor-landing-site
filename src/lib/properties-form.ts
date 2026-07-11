@@ -39,7 +39,26 @@ export function parseExistingImages(formData: FormData): string[] {
   return [];
 }
 
+export function parseNewImageUrls(formData: FormData): string[] {
+  const raw = formData.get("newImageUrls");
+  if (typeof raw !== "string" || !raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      return parsed.filter((item): item is string => typeof item === "string");
+    }
+  } catch {
+    return [];
+  }
+  return [];
+}
+
 export async function saveImages(formData: FormData, title: string) {
+  const preUploaded = parseNewImageUrls(formData);
+  if (preUploaded.length) {
+    return preUploaded;
+  }
+
   const files = formData.getAll("imagenes").filter((item): item is File => item instanceof File && item.size > 0);
   if (!files.length) {
     return [];

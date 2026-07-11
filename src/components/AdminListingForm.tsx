@@ -4,8 +4,9 @@ import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "re
 import { useRouter } from "next/navigation";
 import type { Route } from "next";
 import { UploadCloud, X } from "lucide-react";
-import type { Operation, Property, PropertyType, Zone } from "@/types/property";
-import { propertyTypes, zones } from "@/types/property";
+import type { Operation, Property, PropertyType } from "@/types/property";
+import { propertyTypes } from "@/types/property";
+import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
 
 type Status = {
   message: string;
@@ -81,12 +82,62 @@ export function AdminListingForm({ mode, initial }: AdminListingFormProps) {
     const formData = new FormData(form);
 
     formData.delete("imagenes");
-    for (const photo of localPhotos) {
-      formData.append("imagenes", photo.file);
-    }
-    formData.set("existingImages", JSON.stringify(existingImages));
-
     setSubmitting(true);
+
+    let newImageUrls: string[] = [];
+
+    if (localPhotos.length) {
+      setStatus({ message: "Subiendo fotografías...", tone: "neutral" });
+
+      const signResponse = await fetch("/api/uploads/sign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: (form.elements.namedItem("titulo") as HTMLInputElement | null)?.value || initial?.titulo || "propiedad",
+          files: localPhotos.map((photo) => ({ name: photo.file.name }))
+        })
+      });
+
+      if (!signResponse.ok) {
+        setSubmitting(false);
+        setStatus({ message: "No se pudieron preparar las fotos para subir. Intenta de nuevo.", tone: "error" });
+        return;
+      }
+
+      const signPayload = await signResponse.json();
+
+      if (signPayload.configured) {
+        const supabase = getSupabaseBrowserClient();
+        if (!supabase) {
+          setSubmitting(false);
+          setStatus({ message: "No se pudo conectar con el almacenamiento de imágenes.", tone: "error" });
+          return;
+        }
+
+        for (let index = 0; index < localPhotos.length; index += 1) {
+          const upload = signPayload.uploads[index];
+          const { error } = await supabase.storage
+            .from(signPayload.bucket)
+            .uploadToSignedUrl(upload.path, upload.token, localPhotos[index].file);
+
+          if (error) {
+            setSubmitting(false);
+            setStatus({ message: `No se pudo subir "${localPhotos[index].file.name}". Intenta de nuevo.`, tone: "error" });
+            return;
+          }
+        }
+
+        newImageUrls = signPayload.uploads.map((upload: { publicUrl: string }) => upload.publicUrl);
+      } else {
+        for (const photo of localPhotos) {
+          formData.append("imagenes", photo.file);
+        }
+      }
+    }
+
+    formData.set("existingImages", JSON.stringify(existingImages));
+    formData.set("newImageUrls", JSON.stringify(newImageUrls));
+
     setStatus({ message: mode === "create" ? "Guardando propiedad..." : "Guardando cambios...", tone: "neutral" });
 
     const endpoint = mode === "create" ? "/api/properties" : `/api/properties/${initial?.id}`;
@@ -137,7 +188,8 @@ export function AdminListingForm({ mode, initial }: AdminListingFormProps) {
           Operación
           <select name="operacion" defaultValue={initial?.operacion ?? ("venta" satisfies Operation)}>
             <option value="venta">Venta</option>
-            <option value="renta">Renta</option>
+            <option value="renta">Renta (largo plazo)</option>
+            <option value="renta_temporal">Renta temporal (corto plazo)</option>
           </select>
         </label>
         <label>
@@ -152,13 +204,7 @@ export function AdminListingForm({ mode, initial }: AdminListingFormProps) {
         </label>
         <label>
           Zona <span className="requiredMark">*</span>
-          <select name="zona" defaultValue={initial?.zona ?? ("Veracruz" satisfies Zone)} required>
-            {zones.map((zone) => (
-              <option key={zone} value={zone}>
-                {zone}
-              </option>
-            ))}
-          </select>
+          <input name="zona" required defaultValue={initial?.zona} placeholder="Boca del Río" />
         </label>
         <label>
           Precio <span className="requiredMark">*</span>
@@ -291,6 +337,32 @@ export function AdminListingForm({ mode, initial }: AdminListingFormProps) {
         <label className="checkboxField">
           <input name="destacado" type="checkbox" defaultChecked={initial?.destacado ?? false} />
           Mostrar como propiedad destacada
+        </label>
+        <label className="checkboxField">
+          <input name="disponible" type="checkbox" defaultChecked={initial?.disponible ?? true} />
+          Disponible (visible al público)
+        </label>
+      </div>
+      <div className="adminGrid ownerContactFieldset">
+        <p className="wideAdminField formHint">
+          Datos del propietario — solo visibles en el panel de administración, nunca se muestran al público.
+        </p>
+        <label>
+          Nombre del propietario
+          <input name="propietarioNombre" defaultValue={initial?.contactoPropietario?.nombre} placeholder="Nombre completo" />
+        </label>
+        <label>
+          Teléfono del propietario
+          <input name="propietarioTelefono" defaultValue={initial?.contactoPropietario?.telefono} placeholder="229 000 0000" />
+        </label>
+        <label>
+          Correo del propietario
+          <input
+            name="propietarioCorreo"
+            type="email"
+            defaultValue={initial?.contactoPropietario?.correo}
+            placeholder="propietario@correo.com"
+          />
         </label>
       </div>
       <button className="primaryButton formButton" type="submit" disabled={submitting}>

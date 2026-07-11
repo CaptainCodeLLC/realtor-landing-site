@@ -63,35 +63,14 @@ textarea {
 
 .logo {
   display: inline-flex;
-  gap: 12px;
   align-items: center;
   min-width: max-content;
 }
 
-.logoMark {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  color: #ffffff;
-  background: var(--forest);
-  border-radius: 8px;
-  font-weight: 800;
-}
-
-.logoText {
-  display: grid;
-  line-height: 1.05;
-}
-
-.logoText strong {
-  font-size: 1rem;
-}
-
-.logoText small {
-  color: var(--muted);
-  font-size: 0.75rem;
-  text-transform: uppercase;
+.logoImage {
+  height: 34px;
+  width: auto;
+  display: block;
 }
 
 .mainNav,
@@ -285,13 +264,20 @@ textarea {
 
 .hero h1,
 .adminHero h1,
-.detailSummary h1,
 .notFoundPage h1 {
   margin: 0;
   max-width: 780px;
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(3rem, 7vw, 6.6rem);
   line-height: 0.92;
+}
+
+.detailSummary h1 {
+  margin: 0;
+  max-width: 620px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  line-height: 1.08;
 }
 
 .heroCopy {
@@ -553,6 +539,10 @@ textarea {
   font-weight: 850;
 }
 
+.propertyMedia span.badgeShortTerm {
+  background: rgba(188, 91, 69, 0.92);
+}
+
 .propertyBody {
   display: grid;
   gap: 14px;
@@ -812,10 +802,13 @@ textarea:focus {
 }
 
 .adminHero h1,
-.detailSummary h1,
 .notFoundPage h1 {
   color: var(--ink);
   font-size: clamp(2.4rem, 5vw, 4.8rem);
+}
+
+.detailSummary h1 {
+  color: var(--ink);
 }
 
 .adminGrid {
@@ -917,6 +910,12 @@ textarea:focus {
 .adminRowZone {
   font-weight: 600;
   color: var(--forest);
+}
+
+.adminRowUnavailable {
+  color: var(--coral);
+  font-style: normal;
+  font-weight: 600;
 }
 
 .adminRowLeads {
@@ -1604,7 +1603,10 @@ textarea:focus {
     gap: 14px;
   }
 
-  .logoText small,
+  .logoImage {
+    height: 26px;
+  }
+
   .mainNav {
     font-size: 0.72rem;
   }

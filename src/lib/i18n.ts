@@ -1,4 +1,4 @@
-import type { Operation, Property, PropertyType } from "@/types/property";
+import type { Operation, PropertyType, PublicProperty } from "@/types/property";
 
 export const languages = ["es", "en"] as const;
 
@@ -174,10 +174,12 @@ export const translations = {
     },
     operations: {
       venta: "Venta",
-      renta: "Renta"
+      renta: "Renta",
+      renta_temporal: "Renta temporal"
     },
     priceSuffix: {
       renta: " / mes",
+      renta_temporal: " / mes",
       venta: ""
     },
     propertyTypes: {
@@ -356,10 +358,12 @@ export const translations = {
     },
     operations: {
       venta: "Sale",
-      renta: "Rent"
+      renta: "Rent",
+      renta_temporal: "Short-term rent"
     },
     priceSuffix: {
       renta: " / mo.",
+      renta_temporal: " / mo.",
       venta: ""
     },
     propertyTypes: {
@@ -426,7 +430,7 @@ export function getPropertyTypeLabel(type: PropertyType, language: Language) {
   return translations[language].propertyTypes[type];
 }
 
-export function getPropertyCopy(property: Property, language: Language) {
+export function getPropertyCopy(property: PublicProperty, language: Language) {
   const propertyTranslations = translations[language].properties as Partial<Record<string, PropertyTranslation>>;
   const translated = propertyTranslations[property.id];
 

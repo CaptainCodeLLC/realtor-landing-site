@@ -6,14 +6,16 @@ import { BriefcaseBusiness, Camera, Phone, Users } from "lucide-react";
 import { LanguageToggle, useI18n } from "@/components/I18nProvider";
 import { siteConfig } from "@/lib/site";
 
-export function Logo() {
+type LogoProps = {
+  background?: "light" | "dark";
+};
+
+export function Logo({ background = "light" }: LogoProps) {
+  const src = background === "dark" ? "/images/logo-blanco.png" : "/images/logo-negro.png";
+
   return (
     <Link className="logo" href="/" aria-label="Ir al inicio">
-      <span className="logoMark">MB</span>
-      <span className="logoText">
-        <strong>Mara Barquet</strong>
-        <small>Realtor</small>
-      </span>
+      <img src={src} alt="Mara Barquet Realtor" className="logoImage" />
     </Link>
   );
 }

@@ -6,8 +6,7 @@ import {
   getSupabaseUrl,
   isSupabaseConfigured
 } from "@/lib/supabase-server";
-import type { Lead, Operation, Property, PropertyLocation, PropertyType, Zone } from "@/types/property";
-import { zones } from "@/types/property";
+import type { Lead, Operation, Property, PropertyLocation, PropertyOwnerContact, PropertyType, PublicProperty } from "@/types/property";
 
 const dataDirectory = path.join(process.cwd(), "data");
 const propertiesPath = path.join(dataDirectory, "properties.json");
@@ -19,7 +18,7 @@ type PropertyRow = {
   titulo: string;
   operacion: Operation;
   tipo: PropertyType;
-  zona: Zone;
+  zona: string;
   precio: number | string;
   moneda: "MXN" | "USD";
   ubicacion: PropertyLocation;
@@ -33,9 +32,28 @@ type PropertyRow = {
   amenidades: string[] | null;
   imagenes: string[] | null;
   destacado: boolean;
+  disponible: boolean;
   vistas: number;
   created_at: string;
 };
+
+type PropertyContactRow = {
+  property_id: string;
+  nombre: string;
+  telefono: string;
+  correo: string;
+};
+
+const emptyContact: PropertyOwnerContact = { nombre: "", telefono: "", correo: "" };
+
+function contactToRow(property: Property): PropertyContactRow {
+  return {
+    property_id: property.id,
+    nombre: property.contactoPropietario?.nombre ?? "",
+    telefono: property.contactoPropietario?.telefono ?? "",
+    correo: property.contactoPropietario?.correo ?? ""
+  };
+}
 
 type LeadRow = {
   id: string;
@@ -69,7 +87,7 @@ async function writeJson<T>(filePath: string, value: T) {
   await fs.writeFile(filePath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
-function propertyFromRow(row: PropertyRow): Property {
+function propertyFromRow(row: PropertyRow, contact?: PropertyContactRow): Property {
   return {
     id: row.id,
     titulo: row.titulo,
@@ -89,6 +107,10 @@ function propertyFromRow(row: PropertyRow): Property {
     amenidades: row.amenidades ?? [],
     imagenes: row.imagenes ?? [],
     destacado: row.destacado,
+    disponible: row.disponible,
+    contactoPropietario: contact
+      ? { nombre: contact.nombre, telefono: contact.telefono, correo: contact.correo }
+      : emptyContact,
     vistas: row.vistas,
     createdAt: row.created_at
   };
@@ -114,9 +136,16 @@ function propertyToRow(property: Property): PropertyRow {
     amenidades: property.amenidades,
     imagenes: property.imagenes,
     destacado: property.destacado,
+    disponible: property.disponible,
     vistas: property.vistas,
     created_at: property.createdAt
   };
+}
+
+/** The only shape ever sent to public pages/APIs — strips owner-contact info. */
+export function toPublicProperty(property: Property): PublicProperty {
+  const { contactoPropietario: _contactoPropietario, ...publicProperty } = property;
+  return publicProperty;
 }
 
 function leadFromRow(row: LeadRow): Lead {
@@ -153,13 +182,19 @@ function leadToRow(lead: Lead): LeadRow {
 
 async function getLocalProperties() {
   const properties = await readJson<Property[]>(propertiesPath, []);
-  return properties.sort((first, second) => {
-    if (first.destacado !== second.destacado) {
-      return first.destacado ? -1 : 1;
-    }
+  return properties
+    .map((property) => ({
+      ...property,
+      disponible: property.disponible ?? true,
+      contactoPropietario: property.contactoPropietario ?? emptyContact
+    }))
+    .sort((first, second) => {
+      if (first.destacado !== second.destacado) {
+        return first.destacado ? -1 : 1;
+      }
 
-    return second.precio - first.precio;
-  });
+      return second.precio - first.precio;
+    });
 }
 
 function throwSupabaseError(action: string, error: unknown): never {
@@ -180,7 +215,15 @@ export async function getProperties() {
     .order("precio", { ascending: false });
 
   if (error) throwSupabaseError("properties select", error);
-  return ((data ?? []) as PropertyRow[]).map(propertyFromRow);
+
+  const { data: contactRows, error: contactError } = await supabase.from("property_contacts").select("*");
+  if (contactError) throwSupabaseError("property contacts select", contactError);
+
+  const contactById = new Map(
+    ((contactRows ?? []) as PropertyContactRow[]).map((contact) => [contact.property_id, contact])
+  );
+
+  return ((data ?? []) as PropertyRow[]).map((row) => propertyFromRow(row, contactById.get(row.id)));
 }
 
 export async function getProperty(id: string) {
@@ -193,7 +236,17 @@ export async function getProperty(id: string) {
   const { data, error } = await supabase.from("properties").select("*").eq("id", id).maybeSingle();
 
   if (error) throwSupabaseError("property select", error);
-  return data ? propertyFromRow(data as PropertyRow) : undefined;
+  if (!data) return undefined;
+
+  const { data: contact, error: contactError } = await supabase
+    .from("property_contacts")
+    .select("*")
+    .eq("property_id", id)
+    .maybeSingle();
+
+  if (contactError) throwSupabaseError("property contact select", contactError);
+
+  return propertyFromRow(data as PropertyRow, (contact as PropertyContactRow) ?? undefined);
 }
 
 export async function addProperty(property: Property) {
@@ -206,8 +259,13 @@ export async function addProperty(property: Property) {
 
   const supabase = createSupabaseAdminClient();
   const { error } = await supabase.from("properties").upsert(propertyToRow(property), { onConflict: "id" });
-
   if (error) throwSupabaseError("property upsert", error);
+
+  const { error: contactError } = await supabase
+    .from("property_contacts")
+    .upsert(contactToRow(property), { onConflict: "property_id" });
+  if (contactError) throwSupabaseError("property contact upsert", contactError);
+
   return property;
 }
 
@@ -232,7 +290,14 @@ export async function updateProperty(property: Property) {
     .maybeSingle();
 
   if (error) throwSupabaseError("property update", error);
-  return data ? propertyFromRow(data as PropertyRow) : null;
+  if (!data) return null;
+
+  const { error: contactError } = await supabase
+    .from("property_contacts")
+    .upsert(contactToRow(property), { onConflict: "property_id" });
+  if (contactError) throwSupabaseError("property contact upsert", contactError);
+
+  return propertyFromRow(data as PropertyRow, contactToRow(property));
 }
 
 export async function deleteProperty(id: string) {
@@ -356,13 +421,13 @@ export async function getLeadsForProperty(propertyId: string) {
 }
 
 export async function countPropertiesByZone() {
-  const counts = Object.fromEntries(zones.map((zone) => [zone, 0])) as Record<Zone, number>;
+  const counts: Record<string, number> = {};
 
   if (!isSupabaseConfigured()) {
     const properties = await readJson<Property[]>(propertiesPath, []);
     for (const property of properties) {
-      if (property.zona && counts[property.zona] !== undefined) {
-        counts[property.zona] += 1;
+      if (property.zona) {
+        counts[property.zona] = (counts[property.zona] ?? 0) + 1;
       }
     }
     return counts;
@@ -373,9 +438,9 @@ export async function countPropertiesByZone() {
 
   if (error) throwSupabaseError("zone count select", error);
 
-  for (const property of (data ?? []) as Array<{ zona: Zone }>) {
-    if (property.zona && counts[property.zona] !== undefined) {
-      counts[property.zona] += 1;
+  for (const property of (data ?? []) as Array<{ zona: string }>) {
+    if (property.zona) {
+      counts[property.zona] = (counts[property.zona] ?? 0) + 1;
     }
   }
 

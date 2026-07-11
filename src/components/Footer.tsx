@@ -1,5 +1,6 @@
 "use client";
 
+import { Logo } from "@/components/Header";
 import { useI18n } from "@/components/I18nProvider";
 import { siteConfig } from "@/lib/site";
 
@@ -9,7 +10,7 @@ export function Footer() {
   return (
     <footer className="siteFooter">
       <div>
-        <strong>{siteConfig.brand}</strong>
+        <Logo background="dark" />
         <p>{siteConfig.address}</p>
       </div>
       <div>

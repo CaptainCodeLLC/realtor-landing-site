@@ -7,7 +7,6 @@ import { AdminLogoutButton } from "@/components/AdminLogoutButton";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { countPropertiesByZone, getLeads, getProperties } from "@/lib/cms";
 import { formatMoney, operationLabel, priceSuffix } from "@/lib/format";
-import { zones } from "@/types/property";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +42,9 @@ export default async function AdministrationPage() {
 
   const recentLeads = leads.slice(0, 10);
   const propertyTitles = new Map(properties.map((property) => [property.id, property.titulo]));
+  const topZones = Object.entries(zoneCounts)
+    .sort((first, second) => second[1] - first[1])
+    .slice(0, 3);
 
   return (
     <main className="adminPage">
@@ -71,10 +73,10 @@ export default async function AdministrationPage() {
           <span className="adminStatLabel">Leads totales</span>
           <strong className="adminStatValue">{leads.length}</strong>
         </article>
-        {zones.map((zone) => (
+        {topZones.map(([zone, count]) => (
           <article className="adminStatCard adminStatZone" key={zone}>
             <span className="adminStatLabel">{zone}</span>
-            <strong className="adminStatValue">{zoneCounts[zone] ?? 0}</strong>
+            <strong className="adminStatValue">{count}</strong>
           </article>
         ))}
       </section>
@@ -104,6 +106,7 @@ export default async function AdministrationPage() {
                   <strong>{property.titulo}</strong>
                   <span>
                     {property.tipo} · {property.ubicacion.ciudad}
+                    {!property.disponible && <em className="adminRowUnavailable"> · No disponible</em>}
                   </span>
                 </div>
               </div>

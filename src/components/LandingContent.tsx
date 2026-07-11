@@ -4,16 +4,16 @@ import { ContactForm } from "@/components/ContactForm";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { useI18n } from "@/components/I18nProvider";
 import { PropertyExplorer } from "@/components/PropertyExplorer";
-import type { Property } from "@/types/property";
+import type { PublicProperty } from "@/types/property";
 
 type LandingContentProps = {
-  properties: Property[];
+  properties: PublicProperty[];
 };
 
 export function LandingContent({ properties }: LandingContentProps) {
   const { t } = useI18n();
   const sales = properties.filter((property) => property.operacion === "venta").length;
-  const rentals = properties.filter((property) => property.operacion === "renta").length;
+  const rentals = properties.filter((property) => property.operacion !== "venta").length;
 
   return (
     <main>

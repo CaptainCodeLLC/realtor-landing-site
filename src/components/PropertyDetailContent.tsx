@@ -6,10 +6,10 @@ import { useI18n } from "@/components/I18nProvider";
 import { WhatsappLeadModal } from "@/components/WhatsappLeadModal";
 import { formatMoney, mapEmbedUrl, mapUrl } from "@/lib/format";
 import { getOperationLabel, getPriceSuffix, getPropertyCopy } from "@/lib/i18n";
-import type { Property } from "@/types/property";
+import type { PublicProperty } from "@/types/property";
 
 type PropertyDetailContentProps = {
-  property: Property;
+  property: PublicProperty;
 };
 
 export function PropertyDetailContent({ property }: PropertyDetailContentProps) {

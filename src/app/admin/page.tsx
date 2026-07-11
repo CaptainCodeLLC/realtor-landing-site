@@ -1,12 +1,11 @@
 import Link from "next/link";
 import type { Route } from "next";
 import { Plus } from "lucide-react";
-import { AdminDeletePropertyButton } from "@/components/AdminDeletePropertyButton";
 import { AdminLoginForm } from "@/components/AdminLoginForm";
+import { AdminPropertyList } from "@/components/AdminPropertyList";
 import { AdminLogoutButton } from "@/components/AdminLogoutButton";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { countPropertiesByZone, getLeads, getProperties } from "@/lib/cms";
-import { formatMoney, operationLabel, priceSuffix } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -86,49 +85,7 @@ export default async function AdministrationPage() {
           <p className="eyebrow">Inventario</p>
           <h2>Propiedades publicadas</h2>
         </div>
-        <div className="adminTable">
-          <div className="adminTableHeader">
-            <span>Propiedad</span>
-            <span>Zona</span>
-            <span>Operación</span>
-            <span>Precio</span>
-            <span>Leads</span>
-            <span>Acciones</span>
-          </div>
-          {properties.length === 0 && (
-            <p className="adminEmpty">Aún no hay propiedades. Publica la primera para empezar.</p>
-          )}
-          {properties.map((property) => (
-            <div className="adminRow" key={property.id}>
-              <div className="adminRowMain">
-                <img src={property.imagenes[0] ?? "/images/hero-property.png"} alt={property.titulo} />
-                <div>
-                  <strong>{property.titulo}</strong>
-                  <span>
-                    {property.tipo} · {property.ubicacion.ciudad}
-                    {!property.disponible && <em className="adminRowUnavailable"> · No disponible</em>}
-                  </span>
-                </div>
-              </div>
-              <span className="adminRowZone">{property.zona}</span>
-              <span>{operationLabel(property.operacion)}</span>
-              <b>
-                {formatMoney(property.precio, property.moneda)}
-                {priceSuffix(property.operacion)}
-              </b>
-              <span className="adminRowLeads">{leadsByProperty[property.id] ?? 0}</span>
-              <div className="adminRowActions">
-                <Link href={`/admin/properties/${property.id}` as Route} className="ghostButton">
-                  Ver
-                </Link>
-                <Link href={`/admin/properties/${property.id}/edit` as Route} className="ghostButton">
-                  Editar
-                </Link>
-                <AdminDeletePropertyButton propertyId={property.id} propertyTitle={property.titulo} />
-              </div>
-            </div>
-          ))}
-        </div>
+        <AdminPropertyList properties={properties} leadsByProperty={leadsByProperty} />
       </section>
 
       <section className="adminLeads" aria-label="Leads recientes">

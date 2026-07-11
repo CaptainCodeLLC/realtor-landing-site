@@ -856,6 +856,38 @@ textarea:focus {
   margin-bottom: 16px;
 }
 
+.adminFilterBar {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr 1.3fr auto;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.adminFilterBar input,
+.adminFilterBar select {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 12px;
+  color: var(--ink);
+  background: #f7f9f7;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.adminFilterBar input:focus,
+.adminFilterBar select:focus {
+  outline: 0;
+  border-color: var(--forest);
+  background: #ffffff;
+}
+
+.adminFilterCount {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .adminTable {
   display: grid;
   gap: 10px;
@@ -863,7 +895,7 @@ textarea:focus {
 
 .adminTableHeader {
   display: grid;
-  grid-template-columns: 2.4fr 1fr 1fr 1fr 0.8fr 1.6fr;
+  grid-template-columns: 2fr 0.9fr 0.9fr 1fr 1.3fr 0.9fr 0.6fr 1.6fr;
   gap: 14px;
   padding: 8px 12px;
   font-size: 0.72rem;
@@ -874,7 +906,7 @@ textarea:focus {
 
 .adminRow {
   display: grid;
-  grid-template-columns: 2.4fr 1fr 1fr 1fr 0.8fr 1.6fr;
+  grid-template-columns: 2fr 0.9fr 0.9fr 1fr 1.3fr 0.9fr 0.6fr 1.6fr;
   gap: 14px;
   align-items: center;
   padding: 12px;
@@ -884,20 +916,6 @@ textarea:focus {
 }
 
 .adminRowMain {
-  display: grid;
-  grid-template-columns: 88px 1fr;
-  gap: 12px;
-  align-items: center;
-}
-
-.adminRowMain img {
-  width: 88px;
-  height: 62px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.adminRowMain div {
   display: grid;
   gap: 3px;
 }
@@ -910,6 +928,17 @@ textarea:focus {
 .adminRowZone {
   font-weight: 600;
   color: var(--forest);
+}
+
+.adminRowSpecs {
+  color: var(--muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.adminRowAvailable {
+  color: var(--forest);
+  font-weight: 600;
 }
 
 .adminRowUnavailable {
@@ -1545,6 +1574,10 @@ textarea:focus {
   }
 
   .contactForm {
+    grid-template-columns: 1fr;
+  }
+
+  .adminFilterBar {
     grid-template-columns: 1fr;
   }
 

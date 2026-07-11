@@ -164,7 +164,9 @@ export const translations = {
       yearPending: "Año por confirmar",
       back: "Volver a propiedades",
       mapTitle: "Mapa de",
-      whatsappText: "Hola Mara, me interesa {title}. ¿Me puedes compartir más información?"
+      whatsappText: "Hola Mara, me interesa {title}. ¿Me puedes compartir más información?",
+      copyLink: "Copiar enlace",
+      linkCopied: "¡Enlace copiado!"
     },
     notFound: {
       eyebrow: "No encontrada",
@@ -348,7 +350,9 @@ export const translations = {
       yearPending: "Year to be confirmed",
       back: "Back to properties",
       mapTitle: "Map for",
-      whatsappText: "Hello Mara, I am interested in {title}. Could you send me more information?"
+      whatsappText: "Hello Mara, I am interested in {title}. Could you send me more information?",
+      copyLink: "Copy link",
+      linkCopied: "Link copied!"
     },
     notFound: {
       eyebrow: "Not found",

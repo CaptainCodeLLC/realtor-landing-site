@@ -455,3 +455,27 @@ export function slugify(input: string) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
+
+export async function generateUniqueId(title: string) {
+  const base = slugify(title) || "propiedad";
+
+  if (!isSupabaseConfigured()) {
+    const properties = await getLocalProperties();
+    const existing = new Set(properties.map((property) => property.id));
+    if (!existing.has(base)) return base;
+    let suffix = 2;
+    while (existing.has(`${base}-${suffix}`)) suffix += 1;
+    return `${base}-${suffix}`;
+  }
+
+  const supabase = createSupabaseAdminClient();
+  const { data, error } = await supabase.from("properties").select("id").like("id", `${base}%`);
+  if (error) throwSupabaseError("property id lookup", error);
+
+  const existing = new Set((data ?? []).map((row) => (row as { id: string }).id));
+  if (!existing.has(base)) return base;
+
+  let suffix = 2;
+  while (existing.has(`${base}-${suffix}`)) suffix += 1;
+  return `${base}-${suffix}`;
+}

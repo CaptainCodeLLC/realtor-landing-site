@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import { addProperty, getProperties, slugify, toPublicProperty } from "@/lib/cms";
+import { addProperty, generateUniqueId, getProperties, toPublicProperty } from "@/lib/cms";
 import type { Operation, Property, PropertyType } from "@/types/property";
 import { numberFromForm, parseAmenities, saveImages, textFromForm } from "@/lib/properties-form";
 import { resolveMapEmbedQuery } from "@/lib/google-maps";
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "La descripción es obligatoria." }, { status: 400 });
   }
 
-  const id = `${slugify(title)}-${crypto.randomUUID().slice(0, 8)}`;
+  const id = await generateUniqueId(title);
   const newImages = await saveImages(formData, title);
   const images = newImages.length ? newImages : ["/images/hero-property.png"];
 

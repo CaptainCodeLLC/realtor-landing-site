@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Bath, BedDouble, CalendarDays, Car, MapPinned, Ruler } from "lucide-react";
+import { Bath, BedDouble, CalendarDays, Car, Check, Link2, MapPinned, Ruler } from "lucide-react";
 import { useI18n } from "@/components/I18nProvider";
 import { WhatsappLeadModal } from "@/components/WhatsappLeadModal";
 import { formatMoney, mapEmbedUrl, mapUrl } from "@/lib/format";
@@ -16,6 +17,13 @@ export function PropertyDetailContent({ property }: PropertyDetailContentProps) 
   const { language, t } = useI18n();
   const copy = getPropertyCopy(property, language);
   const whatsappText = t.detail.whatsappText.replace("{title}", copy.titulo);
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  async function handleCopyLink() {
+    await navigator.clipboard.writeText(`${window.location.origin}/propiedades/${property.id}`);
+    setLinkCopied(true);
+    setTimeout(() => setLinkCopied(false), 2000);
+  }
 
   return (
     <main className="detailPage">
@@ -41,6 +49,10 @@ export function PropertyDetailContent({ property }: PropertyDetailContentProps) 
             <a className="secondaryButton" href={mapUrl(property)} target="_blank" rel="noreferrer">
               {t.detail.map}
             </a>
+            <button type="button" className="secondaryButton" onClick={handleCopyLink}>
+              {linkCopied ? <Check size={16} /> : <Link2 size={16} />}
+              {linkCopied ? t.detail.linkCopied : t.detail.copyLink}
+            </button>
           </div>
         </div>
       </section>

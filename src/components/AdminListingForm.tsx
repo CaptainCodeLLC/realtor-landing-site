@@ -125,9 +125,12 @@ export function AdminListingForm({ mode, initial }: AdminListingFormProps) {
 
   return (
     <form className="adminForm" onSubmit={handleSubmit}>
+      <p className="formHint">
+        Los campos marcados con <span className="requiredMark">*</span> son obligatorios.
+      </p>
       <div className="adminGrid">
         <label>
-          Título de la propiedad
+          Título de la propiedad <span className="requiredMark">*</span>
           <input name="titulo" required defaultValue={initial?.titulo} placeholder="Casa en Boca del Río" />
         </label>
         <label>
@@ -148,7 +151,7 @@ export function AdminListingForm({ mode, initial }: AdminListingFormProps) {
           </select>
         </label>
         <label>
-          Zona
+          Zona <span className="requiredMark">*</span>
           <select name="zona" defaultValue={initial?.zona ?? ("Veracruz" satisfies Zone)} required>
             {zones.map((zone) => (
               <option key={zone} value={zone}>
@@ -158,7 +161,7 @@ export function AdminListingForm({ mode, initial }: AdminListingFormProps) {
           </select>
         </label>
         <label>
-          Precio
+          Precio <span className="requiredMark">*</span>
           <input name="precio" required type="number" min="0" defaultValue={initial?.precio} placeholder="8500000" />
         </label>
         <label>
@@ -169,15 +172,15 @@ export function AdminListingForm({ mode, initial }: AdminListingFormProps) {
           </select>
         </label>
         <label>
-          Ciudad
+          Ciudad <span className="requiredMark">*</span>
           <input name="ciudad" required defaultValue={initial?.ubicacion.ciudad} placeholder="Veracruz" />
         </label>
         <label>
-          Estado
+          Estado <span className="requiredMark">*</span>
           <input name="estado" required defaultValue={initial?.ubicacion.estado} placeholder="Veracruz" />
         </label>
         <label className="wideAdminField">
-          Dirección o colonia
+          Dirección o colonia <span className="requiredMark">*</span>
           <input
             name="direccion"
             required
@@ -185,13 +188,14 @@ export function AdminListingForm({ mode, initial }: AdminListingFormProps) {
             placeholder="Colonia, avenida o referencia"
           />
         </label>
-        <label>
-          Latitud del pin
-          <input name="lat" type="number" step="any" defaultValue={initial?.ubicacion.lat} placeholder="19.1738" />
-        </label>
-        <label>
-          Longitud del pin
-          <input name="lng" type="number" step="any" defaultValue={initial?.ubicacion.lng} placeholder="-96.1342" />
+        <label className="wideAdminField">
+          Enlace de Google Maps
+          <input
+            name="googleMapsUrl"
+            type="url"
+            defaultValue={initial?.ubicacion.googleMapsUrl}
+            placeholder="https://maps.app.goo.gl/xxxxx"
+          />
         </label>
         <label>
           Recámaras
@@ -276,7 +280,7 @@ export function AdminListingForm({ mode, initial }: AdminListingFormProps) {
           </label>
         </div>
         <label className="wideAdminField">
-          Descripción
+          Descripción <span className="requiredMark">*</span>
           <textarea
             name="descripcion"
             required

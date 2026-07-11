@@ -669,6 +669,16 @@ label {
   font-weight: 800;
 }
 
+.requiredMark {
+  color: #9b2c1f;
+}
+
+.formHint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 input,
 select,
 textarea {

@@ -11,8 +11,8 @@
       "direccion": "Lomas Altas, Miguel Hidalgo",
       "ciudad": "Ciudad de México",
       "estado": "CDMX",
-      "lat": 19.408,
-      "lng": -99.226
+      "googleMapsUrl": "https://www.google.com/maps?q=19.408,-99.226",
+      "mapEmbedQuery": "19.408,-99.226"
     },
     "recamaras": 4,
     "banos": 4.5,
@@ -47,8 +47,8 @@
       "direccion": "Zona Hotelera, Cancún",
       "ciudad": "Cancún",
       "estado": "Quintana Roo",
-      "lat": 21.1619,
-      "lng": -86.8515
+      "googleMapsUrl": "https://www.google.com/maps?q=21.1619,-86.8515",
+      "mapEmbedQuery": "21.1619,-86.8515"
     },
     "recamaras": 3,
     "banos": 3,
@@ -83,8 +83,8 @@
       "direccion": "Temozón Norte",
       "ciudad": "Mérida",
       "estado": "Yucatán",
-      "lat": 21.0444,
-      "lng": -89.622
+      "googleMapsUrl": "https://www.google.com/maps?q=21.0444,-89.622",
+      "mapEmbedQuery": "21.0444,-89.622"
     },
     "recamaras": 4,
     "banos": 4,
@@ -119,8 +119,8 @@
       "direccion": "Av. Presidente Masaryk",
       "ciudad": "Ciudad de México",
       "estado": "CDMX",
-      "lat": 19.433,
-      "lng": -99.194
+      "googleMapsUrl": "https://www.google.com/maps?q=19.433,-99.194",
+      "mapEmbedQuery": "19.433,-99.194"
     },
     "recamaras": 0,
     "banos": 4,

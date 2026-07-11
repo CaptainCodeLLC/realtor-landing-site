@@ -10,6 +10,7 @@ import {
   saveImages,
   textFromForm
 } from "@/lib/properties-form";
+import { resolveMapEmbedQuery } from "@/lib/google-maps";
 
 export const runtime = "nodejs";
 
@@ -43,10 +44,38 @@ export async function PUT(request: Request, { params }: RouteParams) {
     return NextResponse.json({ message: "La zona es obligatoria." }, { status: 400 });
   }
 
+  const precio = numberFromForm(formData, "precio");
+  if (!precio) {
+    return NextResponse.json({ message: "El precio es obligatorio." }, { status: 400 });
+  }
+
+  const ciudad = textFromForm(formData, "ciudad");
+  if (!ciudad) {
+    return NextResponse.json({ message: "La ciudad es obligatoria." }, { status: 400 });
+  }
+
+  const estado = textFromForm(formData, "estado");
+  if (!estado) {
+    return NextResponse.json({ message: "El estado es obligatorio." }, { status: 400 });
+  }
+
+  const direccion = textFromForm(formData, "direccion");
+  if (!direccion) {
+    return NextResponse.json({ message: "La dirección es obligatoria." }, { status: 400 });
+  }
+
+  const descripcion = textFromForm(formData, "descripcion");
+  if (!descripcion) {
+    return NextResponse.json({ message: "La descripción es obligatoria." }, { status: 400 });
+  }
+
   const keptImages = parseExistingImages(formData);
   const removedImages = existing.imagenes.filter((image) => !keptImages.includes(image));
   const newImages = await saveImages(formData, title);
   const images = [...keptImages, ...newImages];
+
+  const googleMapsUrl = textFromForm(formData, "googleMapsUrl");
+  const mapEmbedQuery = await resolveMapEmbedQuery(googleMapsUrl, `${direccion}, ${ciudad}, ${estado}`);
 
   const updated: Property = {
     ...existing,
@@ -54,14 +83,14 @@ export async function PUT(request: Request, { params }: RouteParams) {
     operacion: textFromForm(formData, "operacion") as Operation,
     tipo: textFromForm(formData, "tipo") as PropertyType,
     zona: zonaRaw as Zone,
-    precio: numberFromForm(formData, "precio"),
+    precio,
     moneda: textFromForm(formData, "moneda") === "USD" ? "USD" : "MXN",
     ubicacion: {
-      direccion: textFromForm(formData, "direccion"),
-      ciudad: textFromForm(formData, "ciudad"),
-      estado: textFromForm(formData, "estado"),
-      lat: numberFromForm(formData, "lat"),
-      lng: numberFromForm(formData, "lng")
+      direccion,
+      ciudad,
+      estado,
+      googleMapsUrl,
+      mapEmbedQuery
     },
     recamaras: numberFromForm(formData, "recamaras"),
     banos: numberFromForm(formData, "banos"),
@@ -69,7 +98,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
     superficieConstruida: numberFromForm(formData, "superficieConstruida"),
     superficieTerreno: numberFromForm(formData, "superficieTerreno"),
     anioConstruccion: numberFromForm(formData, "anioConstruccion"),
-    descripcion: textFromForm(formData, "descripcion"),
+    descripcion,
     amenidades: parseAmenities(formData),
     imagenes: images.length ? images : ["/images/hero-property.png"],
     destacado: formData.get("destacado") === "on"

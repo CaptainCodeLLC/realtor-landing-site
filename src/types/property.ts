@@ -17,8 +17,8 @@ export type PropertyLocation = {
   direccion: string;
   ciudad: string;
   estado: string;
-  lat: number;
-  lng: number;
+  googleMapsUrl: string;
+  mapEmbedQuery: string;
 };
 
 export type Property = {

@@ -17,11 +17,14 @@ export function priceSuffix(operation: Operation) {
 }
 
 export function mapUrl(property: Property) {
-  const { lat, lng, direccion, ciudad, estado } = property.ubicacion;
-  const query = lat && lng ? `${lat},${lng}` : `${direccion}, ${ciudad}, ${estado}`;
+  const { googleMapsUrl, direccion, ciudad, estado } = property.ubicacion;
+  if (googleMapsUrl) return googleMapsUrl;
+  const query = `${direccion}, ${ciudad}, ${estado}`;
   return `https://www.google.com/maps?q=${encodeURIComponent(query)}`;
 }
 
 export function mapEmbedUrl(property: Property) {
-  return `${mapUrl(property)}&output=embed`;
+  const { mapEmbedQuery, direccion, ciudad, estado } = property.ubicacion;
+  const query = mapEmbedQuery || `${direccion}, ${ciudad}, ${estado}`;
+  return `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
 }

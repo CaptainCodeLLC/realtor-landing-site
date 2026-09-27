@@ -166,7 +166,10 @@ export const translations = {
       mapTitle: "Mapa de",
       whatsappText: "Hola Mara, me interesa {title}. ¿Me puedes compartir más información?",
       copyLink: "Copiar enlace",
-      linkCopied: "¡Enlace copiado!"
+      linkCopied: "¡Enlace copiado!",
+      previousPhoto: "Foto anterior",
+      nextPhoto: "Foto siguiente",
+      photo: "Foto"
     },
     notFound: {
       eyebrow: "No encontrada",
@@ -352,7 +355,10 @@ export const translations = {
       mapTitle: "Map for",
       whatsappText: "Hello Mara, I am interested in {title}. Could you send me more information?",
       copyLink: "Copy link",
-      linkCopied: "Link copied!"
+      linkCopied: "Link copied!",
+      previousPhoto: "Previous photo",
+      nextPhoto: "Next photo",
+      photo: "Photo"
     },
     notFound: {
       eyebrow: "Not found",
